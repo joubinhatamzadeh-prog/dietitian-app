@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Personal Dietitian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css" />
+<style>
+  :root {
+    --bg: #f9f8f5;
+    --surface: #ffffff;
+    --surface2: #f2f1ed;
+    --border: rgba(0,0,0,0.08);
+    --border-mid: rgba(0,0,0,0.13);
+    --text: #1a1a18;
+    --text2: #6b6b64;
+    --text3: #a8a89e;
+    --blue: #1a5fb4;
+    --blue-bg: #eaf1fb;
+    --blue-text: #1a4a8a;
+    --green: #2d7d4f;
+    --green-bg: #e8f5ed;
+    --green-text: #1f5c38;
+    --amber: #b45309;
+    --amber-bg: #fef3e2;
+    --amber-text: #92400e;
+    --red: #c0392b;
+    --red-bg: #fdecea;
+    --red-text: #991b1b;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --font: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', monospace;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111110;
+      --surface: #1c1c1a;
+      --surface2: #252523;
+      --border: rgba(255,255,255,0.08);
+      --border-mid: rgba(255,255,255,0.13);
+      --text: #f0ede8;
+      --text2: #9a9990;
+      --text3: #606058;
+      --blue-bg: #1a2d4a;
+      --blue-text: #7eb3f5;
+      --green-bg: #162b20;
+      --green-text: #68c98a;
+      --amber-bg: #2a1f0a;
+      --amber-text: #f5c068;
+      --red-bg: #2a1010;
+      --red-text: #f87171;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  /* ── SHARED ─────────────────────────────────── */
+  .hidden { display: none !important; }
+
+  .page {
+    width: 100%;
+    max-width: 560px;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .page.full-width { max-width: 680px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-weight: 500;
+  }
+  .pill.blue { background: var(--blue-bg); color: var(--blue-text); }
+  .pill.green { background: var(--green-bg); color: var(--green-text); }
+  .pill.amber { background: var(--amber-bg); color: var(--amber-text); }
+  .pill.red { background: var(--red-bg); color: var(--red-text); }
+
+  .flag-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 14px;
+    background: var(--amber-bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--amber-text);
+    line-height: 1.5;
+  }
+  .flag-box i { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+
+  /* ── ONBOARDING ──────────────────────────────── */
+  #onboarding {
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .ob-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+    flex-shrink: 0;
+  }
+
+  .ob-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+    background: var(--blue);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+
+  .brand-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .brand-sub { font-size: 12px; color: var(--text3); }
+
+  .ob-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .ob-progress-label { font-size: 12px; color: var(--text3); }
+  .ob-progress-bar {
+    width: 72px;
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .ob-progress-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .chat-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+  }
+
+  .msg-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .msg-row.user { flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .msg-avatar.ai { background: var(--blue-bg); color: var(--blue-text); }
+  .msg-avatar.user { background: var(--surface2); color: var(--text2); }
+
+  .bubble {
+    max-width: 84%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.58;
+    word-break: break-word;
+  }
+  .bubble.ai {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 5px;
+    box-shadow: var(--shadow-sm);
+  }
+  .bubble.user {
+    background: var(--blue);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+  }
+  .bubble.typing { opacity: 0.55; }
+
+  .chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 0 2px;
+    flex-shrink: 0;
+  }
+
+  .chip {
+    padding: 7px 14px;
+    font-size: 13px;
+    font-family: var(--font);
+    border: 1px solid var(--border-mid);
+    border-radius: 99px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text);
+    transition: background 0.12s, border-color 0.12s;
+    white-space: nowrap;
+  }
+  .chip:hover { background: var(--surface2); border-color: var(--border-mid); }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .input-row textarea {
+    flex: 1;
+    font-size: 14px;
+    font-family: var(--font);
+    padding: 10px 14px;
+    border: 1px solid var(--border-mid);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    resize: none;
+    min-height: 42px;
+    max-height: 110px;
+    line-height: 1.45;
+    transition: border-color 0.15s;
+  }
+  .input-row textarea:focus { border-color: var(--blue); }
+  .input-row textarea::placeholder { color: var(--text3); }
+
+  .send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .send-btn:hover { opacity: 0.88; }
+  .send-btn:active { transform: scale(0.94); }
+  .send-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .send-btn i { font-size: 18px; color: #fff; }
+
+  /* profile summary card */
+  .profile-summary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-top: 12px;
+    box-shadow: var(--shadow-sm);
+  }
+  .profile-summary-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .profile-item {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+  .profile-item-label { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
+  .profile-item-val { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.35; }
+
+  .cta-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 500;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: opacity 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .cta-btn:hover { opacity: 0.88; }
+
+  /* ── DASHBOARD ──────────────────────────────── */
+  #dashboard {
+    padding-top: 0;
+    padding-bottom: 100px;
+  }
+
+  .dash-topbar {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 20;
+    padding: 14px 0 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+  }
+
+  .dash-greeting {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .dash-nav {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    padding-bottom: 1px;
+  }
+  .dash-nav::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 14px 10px;
+    font-size: 11px;
+    font-family: var(--font);
+    color: var(--text3);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .nav-tab i { font-size: 19px; }
+  .nav-tab.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  .dash-screen { display: none; }
+  .dash-screen.active { display: block; }
+
+  /* stat grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+  }
+  .stat-label { font-size: 11px; color: var(--text3); margin-bottom: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-val { font-size: 24px; font-weight: 600; color: var(--text); line-height: 1; }
+  .stat-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .stat-val.warn { color: var(--amber); }
+  .stat-val.good { color: var(--green); }
+  .stat-val.danger { color: var(--red); }
+
+  /* macro bars */
+  .bar-block { margin-bottom: 14px; }
+  .bar-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .bar-meta span:last-child { color: var(--text3); }
+  .bar-track { height: 7px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease; }
+  .bar-fill.b-cal { background: var(--blue); }
+  .bar-fill.b-prot { background: var(--green); }
+  .bar-fill.b-fiber { background: #2d9a6b; }
+  .bar-fill.b-satfat { background: var(--amber); }
+
+  /* log list */
+  .log-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .log-item:last-child { border-bottom: none; }
+  .log-item-name { font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .log-item-meta { font-size: 12px; color: var(--text3); }
+  .log-item-kcal { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; margin-left: 12px; }
+
+  /* chat interface (log + restaurant share this) */
+  .chat-area {
+    min-height: 260px;
+    max-height: 340px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 4px 0;
+  }
+
+  /* meal plan */
+  .day-tabs {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    margin-bottom: 14px;
+    padding-bottom: 2px;
+  }
+  .day-tabs::-webkit-scrollbar { display: none; }
+  .day-tab {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: var(--font);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--text2);
+    white-space: nowrap;
+    transition: all 0.12s;
+  }
+  .day-tab.active {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
+
+  .meal-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .meal-item:last-child { border-bottom: none; }
+  .meal-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 4px; }
+  .meal-name { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+  .meal-macros { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; color: var(--text2); }
+
+  /* profile screen */
+  .profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    gap: 16px;
+  }
+  .profile-row:last-child { border-bottom: none; }
+  .profile-row-key { color: var(--text2); flex-shrink: 0; }
+  .profile-row-val { color: var(--text); font-weight: 500; text-align: right; }
+
+  /* restaurant result */
+  .rest-result {
+    border-left: 3px solid var(--blue);
+    padding-left: 14px;
+    margin-top: 4px;
+  }
+  .rest-dish { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .rest-detail { font-size: 13px; color: var(--text2); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     ONBOARDING
+════════════════════════════════════════════════ -->
+<div class="page" id="onboarding">
+
+  <div class="ob-header">
+    <div class="ob-brand">
+      <div class="brand-icon"><i class="ti ti-salad" aria-hidden="true"></i></div>
+      <div>
+        <div class="brand-name">Dietitian</div>
+        <div class="brand-sub">Personal nutrition coach</div>
+      </div>
+    </div>
+    <div class="ob-progress">
+      <span class="ob-progress-label" id="ob-progress-label">0 of 6</span>
+      <div class="ob-progress-bar"><div class="ob-progress-fill" id="ob-progress-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="chat-scroll" id="ob-chat"></div>
+
+  <div class="chips-row" id="ob-chips"></div>
+
+  <div id="ob-profile-wrap" class="hidden">
+    <div class="profile-summary">
+      <div class="profile-summary-title">Your profile — ready</div>
+      <div class="profile-grid" id="ob-profile-grid"></div>
+      <button class="cta-btn" onclick="goToDashboard()">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        Open my dashboard
+      </button>
+    </div>
+  </div>
+
+  <div class="input-row" id="ob-input-row">
+    <textarea id="ob-input" placeholder="Type your answer…" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();obSend();}"
+      oninput="obResize(this)"></textarea>
+    <button class="send-btn" id="ob-send-btn" onclick="obSend()" disabled aria-label="Send">
+      <i class="ti ti-arrow-up" aria-hidden="true"></i>
+    </button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DASHBOARD
+════════════════════════════════════════════════ -->
+<div class="page full-width hidden" id="dashboard">
+
+  <div class="dash-topbar">
+    <div class="dash-greeting" id="dash-greeting">Good morning</div>
+    <nav class="dash-nav" aria-label="Main navigation">
+      <button class="nav-tab active" onclick="showTab('today')" id="tab-today" aria-current="page">
+        <i class="ti ti-home" aria-hidden="true"></i>Today
+      </button>
+      <button class="nav-tab" onclick="showTab('log')" id="tab-log">
+        <i class="ti ti-pencil-plus" aria-hidden="true"></i>Log
+      </button>
+      <button class="nav-tab" onclick="showTab('restaurant')" id="tab-restaurant">
+        <i class="ti ti-building-store" aria-hidden="true"></i>Restaurant
+      </button>
+      <button class="nav-tab" onclick="showTab('plan')" id="tab-plan">
+        <i class="ti ti-calendar-week" aria-hidden="true"></i>Plan
+      </button>
+      <button class="nav-tab" onclick="showTab('profile')" id="tab-profile">
+        <i class="ti ti-user" aria-hidden="true"></i>Profile
+      </button>
+    </nav>
+  </div>
+
+  <!-- TODAY -->
+  <div class="dash-screen active" id="screen-today">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Remaining</div>
+        <div class="stat-val" id="d-cal-remaining">—</div>
+        <div class="stat-sub" id="d-cal-sub">kcal today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Protein</div>
+        <div class="stat-val" id="d-prot-val">0g</div>
+        <div class="stat-sub" id="d-prot-sub">target —</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sat fat</div>
+        <div class="stat-val good" id="d-satfat-val">0g</div>
+        <div class="stat-sub">limit &lt;17g</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Fiber</div>
+        <div class="stat-val" id="d-fiber-val">0g</div>
+        <div class="stat-sub">target 35–45g</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Progress</div>
+      <div class="bar-block">
+        <div class="bar-meta"><span>Calories</span><span id="b-cal-label">0 / — kcal</span></div>
+        <div class="bar-track"><div class="bar-fill b-cal" id="b-cal" style="width:0%"></div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bar-meta"><span>Protein</span><span id="b-prot-label">0 / —g</span></div>
+        <div class="bar-track"><div class="bar-fill b-prot" id="b-prot" style="width:0%"></div></div>
+      </div>
+      <div class="bar-block">
+        <div class="bar-meta"><span>Fiber</span><span id="b-fiber-label">0 / —g</span></div>
+        <div class="bar-track"><div class="bar-fill b-fiber" id="b-fiber" style="width:0%"></div></div>
+      </div>
+      <div class="bar-block" style="margin-bottom:0">
+        <div class="bar-meta"><span>Saturated fat</span><span id="b-satfat-label">0 / 17g</span></div>
+        <div class="bar-track"><div class="bar-fill b-satfat" id="b-satfat" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        Logged today
+        <span class="pill blue" id="d-meal-count">0 items</span>
+      </div>
+      <div id="d-log-list">
+        <div style="font-size:13px;color:var(--text3);text-align:center;padding:20px 0">
+          Nothing logged yet — tap Log to add a meal
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG -->
+  <div class="dash-screen" id="screen-log">
+    <div class="card">
+      <div class="card-title">Log a meal or exercise</div>
+      <div class="chat-area" id="log-chat">
+        <div class="msg-row">
+          <div class="msg-avatar ai"><i class="ti ti-salad" aria-hidden="true"></i></div>
+          <div class="bubble ai">Tell me what you ate and I'll calculate the macros and update your tracker. You can also log exercise — for example "40 min treadmill, 15% incline".</div>
+        </div>
+      </div>
+      <div class="input-row" style="border-top:1px solid var(--border)">
+        <textarea id="log-input" placeholder="e.g. 2 scrambled eggs, sourdough toast, apple" rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();logSend();}"
+          oninput="obResize(this)"></textarea>
+        <button class="send-btn" id="log-send-btn" onclick="logSend()" disabled aria-label="Send">
+          <i class="ti ti-arrow-up" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+    <div id="log-ldl-flag" class="flag-box hidden">
+      <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+      <span id="log-ldl-text"></span>
+    </div>
+  </div>
+
+  <!-- RESTAURANT -->
+  <div class="dash-screen" id="screen-restaurant">
+    <div class="card">
+      <div class="card-title">Restaurant menu analyzer</div>
+      <div class="chat-area" id="rest-chat">
+        <div class="msg-row">
+          <div class="msg-avatar ai"><i class="ti ti-salad" aria-hidden="true"></i></div>
+          <div class="bubble ai">Paste a menu, a list of dishes, or just describe the restaurant and cuisine. I'll give you a single best order with calorie estimate and any flags.</div>
+        </div>
+      </div>
+      <div class="input-row" style="border-top:1px solid var(--border)">
+        <textarea id="rest-input" placeholder="Paste menu items or describe the restaurant…" rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();restSend();}"
+          oninput="obResize(this)"></textarea>
+        <button class="send-btn" id="rest-send-btn" onclick="restSend()" disabled aria-label="Send">
+          <i class="ti ti-arrow-up" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+    <div id="rest-result-card" class="card hidden">
+      <div class="card-title">Best order</div>
+      <div class="rest-result">
+        <div class="rest-dish" id="rest-dish"></div>
+        <div class="rest-detail" id="rest-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEAL PLAN -->
+  <div class="dash-screen" id="screen-plan">
+    <div class="day-tabs" id="day-tabs"></div>
+    <div class="card" id="plan-card">
+      <div id="plan-content"></div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="dash-screen" id="screen-profile">
+    <div class="card" id="profile-basics-card">
+      <div class="card-title">Your profile</div>
+      <div id="profile-basics-rows"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Daily targets</div>
+      <div class="profile-row"><span class="profile-row-key">Calories</span><span class="profile-row-val" id="p-cal">—</span></div>
+      <div class="profile-row"><span class="profile-row-key">Protein</span><span class="profile-row-val" id="p-prot">140–165 g</span></div>
+      <div class="profile-row"><span class="profile-row-key">Carbohydrates</span><span class="profile-row-val">150–175 g</span></div>
+      <div class="profile-row"><span class="profile-row-key">Fat</span><span class="profile-row-val">55–70 g</span></div>
+      <div class="profile-row"><span class="profile-row-key">Saturated fat</span><span class="profile-row-val">&lt;17 g</span></div>
+      <div class="profile-row"><span class="profile-row-key">Fiber</span><span class="profile-row-val">35–45 g</span></div>
+    </div>
+    <div class="card" id="health-flags-card">
+      <div class="card-title">Health flags</div>
+      <div id="health-flags-content">
+        <div style="font-size:13px;color:var(--text3)">Complete onboarding to see your health flags</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+// ─── CONFIG ─────────────────────────────────────
+// IMPORTANT: Replace this with your actual API key for local testing.
+// For the hosted version, this will be replaced by a server-side proxy.
+const API_KEY = 'YOUR_API_KEY_HERE';
+const API_URL = '/api/chat'; // proxy endpoint (Step 2). For local testing swap to direct:
+// const API_URL = 'https://api.anthropic.com/v1/messages';
+
+// ─── STATE ──────────────────────────────────────
+let userProfile = {};
+let obHistory = [];
+let logHistory = [];
+let logged = [];
+let stepsDone = 0;
+let obBusy = false;
+let logBusy = false;
+let restBusy = false;
+
+const TARGETS = { cal: 1950, prot: 152, fiber: 40, satfat: 17 };
+
+// ─── API ─────────────────────────────────────────
+async function callAPI(system, messages) {
+  const body = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1000,
+    system,
+    messages
+  };
+
+  // Try proxy first, fall back to direct for local dev
+  let url = API_URL;
+  let headers = { 'Content-Type': 'application/json' };
+
+  if (API_KEY !== 'YOUR_API_KEY_HERE' && API_URL === '/api/chat') {
+    // local dev with key set directly
+    url = 'https://api.anthropic.com/v1/messages';
+    headers['x-api-key'] = API_KEY;
+    headers['anthropic-version'] = '2023-06-01';
+    headers['anthropic-dangerous-direct-browser-access'] = 'true';
+  }
+
+  const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error('API error ' + resp.status + ': ' + err);
+  }
+  const data = await resp.json();
+  return data.content?.find(b => b.type === 'text')?.text || '';
+}
+
+// ─── ONBOARDING SYSTEM PROMPT ────────────────────
+const OB_SYSTEM = `You are a warm, direct personal sports dietitian doing a first-time intake with a new user. Your goal is to learn enough to build their personalized nutrition profile.
+
+Ask questions one at a time — never ask multiple questions in one message. Keep each message to 1-3 sentences max. Be human and encouraging, not clinical.
+
+You need to collect: name, age, height and weight, health conditions or flags (LDL, blood pressure, diabetes, allergies, medications — or "none"), dietary preferences and restrictions, exercise routine, and primary goal.
+
+After EACH user reply:
+1. Write a short acknowledgment and your next question (or a closing message if done)
+2. On a new line, output what you just learned as: <!--PROFILE:{"field":"value"}-->
+   Use these exact field keys: name, age, stats (e.g. "6'1\" / 189 lbs"), health, diet, exercise, goal
+3. On a new line, suggest 2-4 quick-reply chips as: <!--CHIPS:["option1","option2"]-->
+
+Once you have all 7 fields collected, instead of another question write a brief warm closing (2 sentences max), then output <!--DONE--> at the very end.
+
+Never output the JSON or HTML comments visibly — they are always on their own line at the end.`;
+
+// ─── ONBOARDING UI ───────────────────────────────
+function obResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+  const siblingBtn = el.parentElement.querySelector('.send-btn');
+  if (siblingBtn) siblingBtn.disabled = el.value.trim().length === 0;
+}
+
+function obAddMsg(role, text, isTyping) {
+  const chat = document.getElementById('ob-chat');
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+  if (isTyping) row.id = 'ob-typing';
+
+  const av = document.createElement('div');
+  av.className = 'msg-avatar ' + role;
+  av.setAttribute('aria-hidden', 'true');
+  av.innerHTML = role === 'ai'
+    ? '<i class="ti ti-salad"></i>'
+    : '<i class="ti ti-user"></i>';
+
+  const bub = document.createElement('div');
+  bub.className = 'bubble ' + role + (isTyping ? ' typing' : '');
+  bub.innerHTML = sanitize(text).replace(/\n/g, '<br>');
+
+  row.appendChild(av);
+  row.appendChild(bub);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function sanitize(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function setChips(options) {
+  const c = document.getElementById('ob-chips');
+  c.innerHTML = '';
+  if (!options || options.length === 0) return;
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      document.getElementById('ob-input').value = opt;
+      document.getElementById('ob-send-btn').disabled = false;
+      obSend();
+    };
+    c.appendChild(btn);
+  });
+}
+
+function parseOBResponse(raw) {
+  const profileMatches = [...raw.matchAll(/<!--PROFILE:(\{.*?\})-->/g)];
+  for (const m of profileMatches) {
+    try {
+      const update = JSON.parse(m[1]);
+      Object.assign(userProfile, update);
+      stepsDone = Object.keys(userProfile).length;
+      const pct = Math.min(100, Math.round(stepsDone / 7 * 100));
+      document.getElementById('ob-progress-fill').style.width = pct + '%';
+      document.getElementById('ob-progress-label').textContent = stepsDone + ' of 7';
+    } catch(e) {}
+  }
+  const chipMatch = raw.match(/<!--CHIPS:(\[.*?\])-->/);
+  let chips = [];
+  if (chipMatch) { try { chips = JSON.parse(chipMatch[1]); } catch(e) {} }
+  const isDone = raw.includes('<!--DONE-->');
+  const clean = raw
+    .replace(/<!--PROFILE:.*?-->/g, '')
+    .replace(/<!--CHIPS:.*?-->/g, '')
+    .replace(/<!--DONE-->/g, '')
+    .trim();
+  return { clean, chips, isDone };
+}
+
+function showProfileSummary() {
+  const grid = document.getElementById('ob-profile-grid');
+  const labels = {
+    name: 'Name', age: 'Age', stats: 'Height / Weight',
+    health: 'Health notes', diet: 'Diet style',
+    exercise: 'Exercise', goal: 'Primary goal'
+  };
+  grid.innerHTML = Object.entries(userProfile).map(([k, v]) =>
+    `<div class="profile-item">
+      <div class="profile-item-label">${labels[k] || k}</div>
+      <div class="profile-item-val">${sanitize(String(v))}</div>
+    </div>`
+  ).join('');
+  document.getElementById('ob-profile-wrap').classList.remove('hidden');
+  document.getElementById('ob-input-row').classList.add('hidden');
+  document.getElementById('ob-chips').innerHTML = '';
+  document.getElementById('ob-progress-label').textContent = '7 of 7';
+  document.getElementById('ob-progress-fill').style.width = '100%';
+}
+
+async function obSend() {
+  const input = document.getElementById('ob-input');
+  const text = input.value.trim();
+  if (!text || obBusy) return;
+
+  obBusy = true;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('ob-send-btn').disabled = true;
+  document.getElementById('ob-chips').innerHTML = '';
+
+  obAddMsg('user', text);
+  obHistory.push({ role: 'user', content: text });
+  obAddMsg('ai', '···', true);
+
+  try {
+    const raw = await callAPI(OB_SYSTEM, obHistory);
+    document.getElementById('ob-typing')?.remove();
+    obHistory.push({ role: 'assistant', content: raw });
+    const { clean, chips, isDone } = parseOBResponse(raw);
+    obAddMsg('ai', clean);
+    if (isDone) {
+      showProfileSummary();
+    } else {
+      setChips(chips);
+    }
+  } catch(e) {
+    document.getElementById('ob-typing')?.remove();
+    obAddMsg('ai', 'Connection error — please check the API configuration and try again.');
+    console.error(e);
+  }
+  obBusy = false;
+}
+
+async function startOnboarding() {
+  const opening = "Hi! I'm your personal dietitian. I'll ask you a few quick questions to set up your profile — takes about 2 minutes.\n\nWhat's your name?";
+  obHistory.push({ role: 'assistant', content: opening });
+  obAddMsg('ai', opening);
+  setChips([]);
+}
+
+// ─── DASHBOARD TRANSITION ────────────────────────
+function goToDashboard() {
+  document.getElementById('onboarding').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+
+  const name = userProfile.name ? userProfile.name.split(' ')[0] : 'there';
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('dash-greeting').textContent = greeting + ', ' + name;
+
+  // Update profile tab
+  const basicsRows = document.getElementById('profile-basics-rows');
+  const rowData = [
+    ['Name', userProfile.name || '—'],
+    ['Age', userProfile.age || '—'],
+    ['Height / Weight', userProfile.stats || '—'],
+    ['Goal', userProfile.goal || '—'],
+    ['Diet style', userProfile.diet || '—'],
+    ['Exercise', userProfile.exercise || '—'],
+  ];
+  basicsRows.innerHTML = rowData.map(([k, v]) =>
+    `<div class="profile-row"><span class="profile-row-key">${k}</span><span class="profile-row-val">${sanitize(v)}</span></div>`
+  ).join('');
+
+  // Health flags
+  if (userProfile.health && userProfile.health.toLowerCase() !== 'none') {
+    document.getElementById('health-flags-content').innerHTML =
+      `<div class="flag-box"><i class="ti ti-alert-triangle"></i><span>${sanitize(userProfile.health)}</span></div>`;
+  }
+
+  updateDashboard();
+  buildPlanTabs();
+}
+
+// ─── DASHBOARD TABS ──────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.dash-screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => {
+    b.classList.remove('active');
+    b.removeAttribute('aria-current');
+  });
+  document.getElementById('screen-' + name).classList.add('active');
+  const tabBtn = document.getElementById('tab-' + name);
+  tabBtn.classList.add('active');
+  tabBtn.setAttribute('aria-current', 'page');
+}
+
+// ─── TODAY DASHBOARD ─────────────────────────────
+function updateDashboard() {
+  const totals = logged.reduce((acc, item) => {
+    if (item.type === 'meal') {
+      acc.kcal += item.kcal || 0;
+      acc.prot += item.protein || 0;
+      acc.fiber += item.fiber || 0;
+      acc.satfat += item.satfat || 0;
+    }
+    return acc;
+  }, { kcal: 0, prot: 0, fiber: 0, satfat: 0 });
+
+  const calTarget = TARGETS.cal;
+  const remaining = Math.max(0, calTarget - totals.kcal);
+
+  document.getElementById('d-cal-remaining').textContent = remaining.toLocaleString();
+  document.getElementById('d-cal-remaining').className = 'stat-val' + (totals.kcal > calTarget ? ' warn' : '');
+  document.getElementById('d-prot-val').textContent = Math.round(totals.prot) + 'g';
+  document.getElementById('d-prot-val').className = 'stat-val' + (totals.prot >= 140 ? ' good' : '');
+  document.getElementById('d-satfat-val').textContent = Math.round(totals.satfat) + 'g';
+  document.getElementById('d-satfat-val').className = 'stat-val' + (totals.satfat > 17 ? ' danger' : ' good');
+  document.getElementById('d-fiber-val').textContent = Math.round(totals.fiber) + 'g';
+
+  const pct = (v, t) => Math.min(100, Math.round(v / t * 100));
+  document.getElementById('b-cal').style.width = pct(totals.kcal, calTarget) + '%';
+  document.getElementById('b-prot').style.width = pct(totals.prot, TARGETS.prot) + '%';
+  document.getElementById('b-fiber').style.width = pct(totals.fiber, TARGETS.fiber) + '%';
+  document.getElementById('b-satfat').style.width = pct(totals.satfat, TARGETS.satfat) + '%';
+  document.getElementById('b-cal-label').textContent = Math.round(totals.kcal) + ' / ' + calTarget + ' kcal';
+  document.getElementById('b-prot-label').textContent = Math.round(totals.prot) + ' / ' + TARGETS.prot + 'g';
+  document.getElementById('b-fiber-label').textContent = Math.round(totals.fiber) + ' / ' + TARGETS.fiber + 'g';
+  document.getElementById('b-satfat-label').textContent = Math.round(totals.satfat) + ' / 17g';
+
+  const meals = logged.filter(i => i.type === 'meal');
+  document.getElementById('d-meal-count').textContent = meals.length + ' item' + (meals.length !== 1 ? 's' : '');
+
+  const list = document.getElementById('d-log-list');
+  if (meals.length === 0) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:20px 0">Nothing logged yet — tap Log to add a meal</div>';
+  } else {
+    list.innerHTML = meals.map(m => `
+      <div class="log-item">
+        <div>
+          <div class="log-item-name">${sanitize(m.name)}</div>
+          <div class="log-item-meta">${Math.round(m.protein)}g protein · ${Math.round(m.fiber)}g fiber${m.ldl_flag ? ' · <span style="color:var(--amber)">LDL flag</span>' : ''}</div>
+        </div>
+        <div class="log-item-kcal">${Math.round(m.kcal)} kcal</div>
+      </div>`).join('');
+  }
+}
+
+// ─── LOG ─────────────────────────────────────────
+const LOG_SYSTEM = `You are a precise sports dietitian calculating nutrition for logged food and exercise.
+
+The user's profile: ${JSON.stringify(userProfile)}. Daily targets: 1900-2050 kcal, 140-165g protein, <17g saturated fat (LDL management is medically important), 35-45g fiber.
+
+When the user logs food or exercise, respond ONLY with valid JSON — no other text, no markdown:
+
+For food: {"type":"meal","name":"[concise name]","kcal":[number],"protein":[number],"fiber":[number],"satfat":[number],"ldl_flag":[true/false],"ldl_note":"[brief note if flagged, else empty]","note":"[one brief practical tip]"}
+
+For exercise: {"type":"exercise","name":"[description]","kcal_burned":[number],"timing_note":"[meal timing advice]"}
+
+Be precise. Flag anything with >4g sat fat. Round all numbers to nearest integer.`;
+
+function logChatAddMsg(role, html) {
+  const chat = document.getElementById('log-chat');
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+  const av = document.createElement('div');
+  av.className = 'msg-avatar ' + role;
+  av.setAttribute('aria-hidden', 'true');
+  av.innerHTML = role === 'ai' ? '<i class="ti ti-salad"></i>' : '<i class="ti ti-user"></i>';
+  const bub = document.createElement('div');
+  bub.className = 'bubble ' + role;
+  bub.innerHTML = html;
+  row.appendChild(av);
+  row.appendChild(bub);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  return row;
+}
+
+async function logSend() {
+  const input = document.getElementById('log-input');
+  const text = input.value.trim();
+  if (!text || logBusy) return;
+
+  logBusy = true;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('log-send-btn').disabled = true;
+
+  logChatAddMsg('user', sanitize(text));
+  logHistory.push({ role: 'user', content: text });
+
+  const typingRow = document.createElement('div');
+  typingRow.className = 'msg-row ai'; typingRow.id = 'log-typing';
+  const tAv = document.createElement('div'); tAv.className = 'msg-avatar ai'; tAv.setAttribute('aria-hidden','true'); tAv.innerHTML = '<i class="ti ti-salad"></i>';
+  const tBub = document.createElement('div'); tBub.className = 'bubble ai typing'; tBub.textContent = '···';
+  typingRow.appendChild(tAv); typingRow.appendChild(tBub);
+  document.getElementById('log-chat').appendChild(typingRow);
+  document.getElementById('log-chat').scrollTop = 9999;
+
+  try {
+    const raw = await callAPI(LOG_SYSTEM, logHistory);
+    document.getElementById('log-typing')?.remove();
+    logHistory.push({ role: 'assistant', content: raw });
+
+    let parsed = null;
+    try {
+      parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch(e) {}
+
+    if (parsed && parsed.type === 'meal') {
+      logged.push(parsed);
+      logChatAddMsg('ai', `<strong>${sanitize(parsed.name)}</strong> — ${Math.round(parsed.kcal)} kcal<br>
+        <span style="font-size:12px;opacity:0.8">${Math.round(parsed.protein)}g protein · ${Math.round(parsed.fiber)}g fiber · ${Math.round(parsed.satfat)}g sat fat</span>
+        ${parsed.ldl_flag ? `<br><span style="font-size:12px;color:var(--amber)">⚠ ${sanitize(parsed.ldl_note)}</span>` : ''}
+        ${parsed.note ? `<br><span style="font-size:12px;opacity:0.75">${sanitize(parsed.note)}</span>` : ''}`);
+      if (parsed.ldl_flag) {
+        document.getElementById('log-ldl-flag').classList.remove('hidden');
+        document.getElementById('log-ldl-text').textContent = parsed.ldl_note;
+      }
+      updateDashboard();
+    } else if (parsed && parsed.type === 'exercise') {
+      logged.push(parsed);
+      logChatAddMsg('ai', `<strong>${sanitize(parsed.name)}</strong> — ${Math.round(parsed.kcal_burned)} kcal burned${parsed.timing_note ? `<br><span style="font-size:12px;opacity:0.8">${sanitize(parsed.timing_note)}</span>` : ''}`);
+      updateDashboard();
+    } else {
+      logChatAddMsg('ai', sanitize(raw));
+    }
+  } catch(e) {
+    document.getElementById('log-typing')?.remove();
+    logChatAddMsg('ai', 'Connection error — check API configuration.');
+    console.error(e);
+  }
+  logBusy = false;
+}
+
+// ─── RESTAURANT ───────────────────────────────────
+const REST_SYSTEM = `You are a sports dietitian advising on restaurant choices. User profile: ${JSON.stringify(userProfile)}. Targets: 500-750 kcal per meal, <6g saturated fat, high protein. LDL management is medically important.
+
+Analyze the menu and respond ONLY with valid JSON — no other text:
+{"dish":"[exact dish name]","kcal_est":[number],"kcal_range":"[e.g. ~580 ± 80 kcal]","protein_est":[number],"ldl_flag":[true/false],"ldl_note":"[note if flagged, else empty]","ordering_tips":"[1-2 specific modifications]","why":"[one sentence reason]"}`;
+
+function restChatAddMsg(role, html) {
+  const chat = document.getElementById('rest-chat');
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+  const av = document.createElement('div'); av.className = 'msg-avatar ' + role; av.setAttribute('aria-hidden','true');
+  av.innerHTML = role === 'ai' ? '<i class="ti ti-salad"></i>' : '<i class="ti ti-user"></i>';
+  const bub = document.createElement('div'); bub.className = 'bubble ' + role;
+  bub.innerHTML = html;
+  row.appendChild(av); row.appendChild(bub);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function restSend() {
+  const input = document.getElementById('rest-input');
+  const text = input.value.trim();
+  if (!text || restBusy) return;
+
+  restBusy = true;
+  input.value = ''; input.style.height = 'auto';
+  document.getElementById('rest-send-btn').disabled = true;
+  document.getElementById('rest-result-card').classList.add('hidden');
+
+  restChatAddMsg('user', sanitize(text));
+
+  const typingRow = document.createElement('div');
+  typingRow.id = 'rest-typing'; typingRow.className = 'msg-row ai';
+  const tAv = document.createElement('div'); tAv.className = 'msg-avatar ai'; tAv.setAttribute('aria-hidden','true'); tAv.innerHTML = '<i class="ti ti-salad"></i>';
+  const tBub = document.createElement('div'); tBub.className = 'bubble ai typing'; tBub.textContent = 'Analyzing menu…';
+  typingRow.appendChild(tAv); typingRow.appendChild(tBub);
+  document.getElementById('rest-chat').appendChild(typingRow);
+  document.getElementById('rest-chat').scrollTop = 9999;
+
+  try {
+    const raw = await callAPI(REST_SYSTEM, [{ role: 'user', content: text }]);
+    document.getElementById('rest-typing')?.remove();
+    let parsed = null;
+    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch(e) {}
+
+    if (parsed && parsed.dish) {
+      restChatAddMsg('ai', `<strong>${sanitize(parsed.dish)}</strong> — ${sanitize(parsed.kcal_range)}<br>
+        <span style="font-size:12px;opacity:0.8">~${parsed.protein_est}g protein</span>
+        ${parsed.ldl_flag ? `<br><span style="font-size:12px;color:var(--amber)">⚠ ${sanitize(parsed.ldl_note)}</span>` : ''}`);
+
+      const card = document.getElementById('rest-result-card');
+      card.classList.remove('hidden');
+      document.getElementById('rest-dish').textContent = parsed.dish + ' — ' + parsed.kcal_range;
+      document.getElementById('rest-detail').innerHTML =
+        sanitize(parsed.why) + '<br><br><strong>Order tip:</strong> ' + sanitize(parsed.ordering_tips) +
+        (parsed.ldl_flag ? `<br><br><span style="color:var(--amber)">⚠ ${sanitize(parsed.ldl_note)}</span>` : '');
+    } else {
+      restChatAddMsg('ai', sanitize(raw));
+    }
+  } catch(e) {
+    document.getElementById('rest-typing')?.remove();
+    restChatAddMsg('ai', 'Connection error — check API configuration.');
+    console.error(e);
+  }
+  restBusy = false;
+}
+
+// ─── MEAL PLAN ────────────────────────────────────
+const PLAN = [
+  { day: 'Day 1', total: 2153, meals: [
+    { type: 'Breakfast', name: 'Granola Bowl', kcal: 505, protein: 28, carbs: 68, fat: 15 },
+    { type: 'Lunch', name: 'Chicken Salad with Penne', kcal: 779, protein: 58, carbs: 72, fat: 22 },
+    { type: 'Dinner', name: 'Salmon and Rice', kcal: 869, protein: 48, carbs: 82, fat: 28 }
+  ]},
+  { day: 'Day 2', total: 2059, redMeat: true, meals: [
+    { type: 'Breakfast', name: 'Eggs and Sourdough', kcal: 552, protein: 32, carbs: 38, fat: 26 },
+    { type: 'Lunch', name: 'Chicken and Rice', kcal: 610, protein: 52, carbs: 58, fat: 14 },
+    { type: 'Snack', name: 'Greek Yogurt, Walnuts, Honey', kcal: 365, protein: 22, carbs: 28, fat: 18 },
+    { type: 'Dinner', name: 'Sirloin Steak with Potatoes', kcal: 666, protein: 54, carbs: 22, fat: 34 }
+  ]},
+  { day: 'Day 3', total: 2199, meals: [
+    { type: 'Breakfast', name: 'Vanilla Protein Porridge', kcal: 639, protein: 38, carbs: 88, fat: 10 },
+    { type: 'Lunch', name: 'Pesto Chicken Bacon Pasta', kcal: 593, protein: 52, carbs: 42, fat: 22 },
+    { type: 'Snack 1', name: 'Rice Cake, Peanut Butter, Banana', kcal: 227, protein: 8, carbs: 28, fat: 10 },
+    { type: 'Snack 2', name: 'Greek Yogurt Smoothie', kcal: 360, protein: 18, carbs: 62, fat: 2 },
+    { type: 'Dinner', name: 'Salmon, Salad & Croutons', kcal: 380, protein: 34, carbs: 18, fat: 18 }
+  ]},
+  { day: 'Day 4', total: 2049, redMeat: true, meals: [
+    { type: 'Breakfast', name: 'Overnight Oats', kcal: 583, protein: 34, carbs: 72, fat: 14 },
+    { type: 'Lunch', name: 'Tuna Wrap', kcal: 506, protein: 44, carbs: 48, fat: 14 },
+    { type: 'Dinner', name: 'Beef Spaghetti (90/10 beef)', kcal: 820, protein: 58, carbs: 88, fat: 24 }
+  ]},
+  { day: 'Day 5', total: 1895, meals: [
+    { type: 'Breakfast', name: 'Greek Yogurt Bowl', kcal: 490, protein: 30, carbs: 58, fat: 14 },
+    { type: 'Lunch', name: 'Chicken Shawarma Bowl', kcal: 620, protein: 52, carbs: 52, fat: 16 },
+    { type: 'Snack', name: 'Apple with Peanut Butter', kcal: 165, protein: 4, carbs: 22, fat: 8 },
+    { type: 'Dinner', name: 'Baked Cod, Veg & Lentils', kcal: 620, protein: 52, carbs: 52, fat: 16 }
+  ]},
+  { day: 'Day 6', total: 1980, meals: [
+    { type: 'Breakfast', name: 'Eggs, Avocado Toast & Fruit', kcal: 510, protein: 28, carbs: 42, fat: 24 },
+    { type: 'Lunch', name: 'Tuna and White Bean Salad', kcal: 570, protein: 42, carbs: 42, fat: 22 },
+    { type: 'Snack', name: 'Greek Yogurt with Berries', kcal: 200, protein: 16, carbs: 22, fat: 4 },
+    { type: 'Dinner', name: 'Turkey Meatballs & Pasta', kcal: 700, protein: 52, carbs: 72, fat: 18 }
+  ]},
+  { day: 'Day 7', total: 1960, meals: [
+    { type: 'Breakfast', name: 'Protein Oatmeal', kcal: 530, protein: 34, carbs: 68, fat: 14 },
+    { type: 'Lunch', name: 'Salmon Wrap or Grain Bowl', kcal: 580, protein: 44, carbs: 52, fat: 20 },
+    { type: 'Snack', name: 'Cottage Cheese or Yogurt with Fruit', kcal: 230, protein: 22, carbs: 22, fat: 6 },
+    { type: 'Dinner', name: 'Chicken Sausage & Eggplant Stew', kcal: 620, protein: 44, carbs: 52, fat: 24 }
+  ]}
+];
+
+let activePlanDay = 0;
+
+function buildPlanTabs() {
+  const tabs = document.getElementById('day-tabs');
+  tabs.innerHTML = PLAN.map((d, i) =>
+    `<button class="day-tab ${i === 0 ? 'active' : ''}" onclick="selectPlanDay(${i})">${d.day}</button>`
+  ).join('');
+  renderPlanDay(0);
+}
+
+function selectPlanDay(i) {
+  activePlanDay = i;
+  document.querySelectorAll('.day-tab').forEach((t, idx) => t.classList.toggle('active', idx === i));
+  renderPlanDay(i);
+}
+
+function renderPlanDay(i) {
+  const day = PLAN[i];
+  document.getElementById('plan-content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-weight:600;font-size:15px">${day.day}</div>
+      <div style="font-size:13px;color:var(--text2)">~${day.total.toLocaleString()} kcal</div>
+    </div>
+    ${day.redMeat ? `<div class="flag-box" style="margin-bottom:12px"><i class="ti ti-alert-triangle"></i><span>Red meat day — skip butter at breakfast, use olive oil only.</span></div>` : ''}
+    ${day.meals.map(m => `
+      <div class="meal-item">
+        <div class="meal-type">${m.type}</div>
+        <div class="meal-name">${m.name}</div>
+        <div class="meal-macros">
+          <span>${m.kcal} kcal</span>
+          <span>${m.protein}g protein</span>
+          <span>${m.carbs}g carbs</span>
+          <span>${m.fat}g fat</span>
+        </div>
+      </div>`).join('')}`;
+}
+
+// ─── INPUT ENABLE ON TYPE ─────────────────────────
+document.getElementById('log-input').addEventListener('input', function() {
+  document.getElementById('log-send-btn').disabled = this.value.trim().length === 0;
+});
+document.getElementById('rest-input').addEventListener('input', function() {
+  document.getElementById('rest-send-btn').disabled = this.value.trim().length === 0;
+});
+
+// ─── INIT ─────────────────────────────────────────
+startOnboarding();
+</script>
+</body>
+</html>
