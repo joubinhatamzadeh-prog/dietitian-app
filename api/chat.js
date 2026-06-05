@@ -15,22 +15,19 @@ export default async function handler(req, res) {
     req.on('end', resolve);
   });
 
-  try {
-    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'messages-2023-12-15',
-      },
-      body: body,
-    });
+  const parsed = JSON.parse(body);
 
-    const text = await upstream.text();
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(upstream.status).send(text);
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+  const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify(parsed),
+  });
+
+  const text = await upstream.text();
+  res.setHeader('Content-Type', 'application/json');
+  return res.status(upstream.status).send(text);
 }
